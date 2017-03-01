@@ -3,14 +3,10 @@ library (data.table)
 library(dplyr)
 library(DMwR)
 
-traindir <- "C:\\Users\\vivek\\Documents\\Data Science\\cleaning data\\project\\dataset\\train"
-setwd(traindir)
 subject.train <- read.delim("subject_train.txt", sep = "", header = FALSE)
 y.train <- read.delim("y_train.txt", sep = "", header = FALSE)
 X.train <- read.delim("X_train.txt", sep = "", header = FALSE)
 
-testdir <- "C:\\Users\\vivek\\Documents\\Data Science\\cleaning data\\project\\dataset\\test"
-setwd(testdir)
 subject.test <- read.delim("subject_test.txt", sep = "", header = FALSE)
 y.test <- read.delim("y_test.txt", sep = "", header = FALSE)
 X.test <- read.delim("X_test.txt", sep = "", header = FALSE)
@@ -33,7 +29,10 @@ validfeat <- as.character(validfeat)
 X.total <- rbind(X.test, X.train)
 colnames(X.total) <- c(validfeat)
 
-# to avoid error due to naming issue, error is around 400: 420
+# to avoid error due to naming issue, error is around 400: 420,
+# solution found by googling, related to not following the variable
+# naming convention.
+
 valid.column.names <- make.names(names=names(X.total), unique=TRUE, 
                                  allow_ = TRUE)
 names(X.total) <- valid.column.names
