@@ -26,15 +26,20 @@ setwd(maindir)
 features <- read.delim("features.txt", sep = "", header = FALSE)
 validfeat <- t(features$V2)
 validfeat <- as.character(validfeat)
+# clean feature names using gsub(replacethis, replaceby, var)
+validfeat <- gsub("()", ".", validfeat, fixed = TRUE)
+validfeat <- gsub(",", ".", validfeat, fixed = TRUE)
+validfeat <- gsub(")", "", validfeat, fixed = TRUE)
+validfeat <- gsub("(", ".", validfeat, fixed = TRUE)
+validfeat <- gsub("-", ".", validfeat, fixed = TRUE)
 X.total <- rbind(X.test, X.train)
-colnames(X.total) <- c(validfeat)
 
-# to avoid error due to naming issue, error is around 400: 420,
-# solution found by googling, related to not following the variable
-# naming convention.
-
-valid.column.names <- make.names(names=names(X.total), unique=TRUE, 
-                                 allow_ = TRUE)
+# to avoid error due to naming issue, error is around 400: 420, make valid variable name
+valid.column.names <- make.names(c(validfeat), unique = TRUE, allow_ = TRUE)
+# replace .. by . in column names
+valid.column.names <- gsub("..", ".", valid.column.names, fixed = TRUE)
+# replace . at end of variable name
+valid.column.names <- gsub("(\\.)+$", "", valid.column.names) 
 names(X.total) <- valid.column.names
 
 # extract columns with mean and sdev in their name
@@ -45,7 +50,6 @@ mean.std <- X.total %>%
 finalarray <- subject.tot
 finalarray <- cbind(finalarray, y.total)
 finalarray <- cbind(finalarray, mean.std)
-
 
 sapply(finalarray, class)  # class type of variables in the finalarray
 
