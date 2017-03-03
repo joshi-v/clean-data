@@ -62,8 +62,11 @@ finalarray$Activity <- factor(finalarray$Activity,
                     labels = c("Walking", "Walking Upstairs", "Walking Downstairs",
                                "Sitting", "Standing", "Laying"))
 
-write.table(finalarray, file = "cleandata.txt", row.names=FALSE)
-
 # tidy data according the Hadley Wickham's paper http://vita.had.co.nz/papers/tidy-data.pdf
 # is data with each variable in a column and each observation in a row.
 
+resdf <- finalarray %>%
+  group_by(Activity, SubjectID) %>%
+  summarise_all(mean)
+
+write.table(resdf, file = "cleandata.txt", row.names=FALSE)
